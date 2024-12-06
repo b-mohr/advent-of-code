@@ -1,0 +1,6 @@
+.gradle
+.idea
+.kotlin/
+build
+input/*.txt
+local.properties
