@@ -1,3 +1,6 @@
+import common.readLines
+import common.shouldBe
+
 fun main() {
     part1(readLines("day05_test")) shouldBe 143
     part1(readLines("day05")) shouldBe 7307

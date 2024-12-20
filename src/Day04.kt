@@ -1,3 +1,6 @@
+import common.readInput
+import common.shouldBe
+
 fun main() {
     part1(readInput("day04_test").toMatrix()) shouldBe 18
     part1(readInput("day04").toMatrix()) shouldBe 2633

@@ -1,7 +1,7 @@
 package day11
 
-import readInput
-import shouldBe
+import common.readInput
+import common.shouldBe
 
 fun main() {
     solve(readInput("day11_test"), 6) shouldBe 22

@@ -1,3 +1,6 @@
+import common.readInput
+import common.shouldBe
+
 fun main() {
     part1(readInput("day03_test")) shouldBe 161
     part1(readInput("day03")) shouldBe 155955228

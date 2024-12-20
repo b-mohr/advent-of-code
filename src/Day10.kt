@@ -1,7 +1,7 @@
 package day10
 
-import readLines
-import shouldBe
+import common.readLines
+import common.shouldBe
 
 fun main() {
     part1(readLines("day10_test")) shouldBe 36

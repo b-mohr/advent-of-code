@@ -1,7 +1,7 @@
 package day13
 
-import readLines
-import shouldBe
+import common.readLines
+import common.shouldBe
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor

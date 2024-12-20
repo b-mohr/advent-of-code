@@ -1,3 +1,5 @@
+import common.readLines
+import common.shouldBe
 import kotlin.math.abs
 
 fun main() {

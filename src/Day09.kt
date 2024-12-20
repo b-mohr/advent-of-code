@@ -1,7 +1,7 @@
 package day09
 
-import readInput
-import shouldBe
+import common.readInput
+import common.shouldBe
 
 fun main() {
     part1(readInput("day09_test")) shouldBe 1928
