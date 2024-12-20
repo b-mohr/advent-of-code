@@ -1,23 +1,12 @@
 package day15
 
-import common.readLines
-import common.shouldBe
+import common.*
 
 fun main() {
     part1(readLines("day15_test")) shouldBe 10092
     part1(readLines("day15")) shouldBe 1475249
     part2(readLines("day15_test")) shouldBe 9021
     part2(readLines("day15")) shouldBe 1509724
-}
-
-data class Position(val x: Int, val y: Int) {
-    operator fun plus(other: Position): Position {
-        return Position(this.x + other.x, this.y + other.y)
-    }
-}
-
-enum class Movement(val position: Position) {
-    Up(Position(0, -1)), Down(Position(0, 1)), Left(Position(-1, 0)), Right(Position(1, 0))
 }
 
 interface Structure {
@@ -48,24 +37,24 @@ class Warehouse {
         robot = position
     }
 
-    fun moveRobot(movement: Movement) {
-        val nextPosition = robot + movement.position
+    fun moveRobot(direction: Direction) {
+        val nextPosition = robot + direction.position
         when (val structure = getStructure(nextPosition)) {
             null -> robot = nextPosition
             is Structure.Wall -> {}
             is Structure.Box ->
-                if (tryMoveBox(nextPosition, movement)) {
+                if (tryMoveBox(nextPosition, direction)) {
                     robot = nextPosition
                 }
 
             is Structure.WideBox ->
-                if (tryMoveWideBox(structure.left, structure.right, movement)) {
+                if (tryMoveWideBox(structure.left, structure.right, direction)) {
                     robot = nextPosition
                 }
         }
     }
 
-    private fun tryMoveBox(position: Position, direction: Movement): Boolean {
+    private fun tryMoveBox(position: Position, direction: Direction): Boolean {
         val nextPosition = position + direction.position
         val nextStructure = getStructure(nextPosition)
 
@@ -93,7 +82,7 @@ class Warehouse {
         addStructure(Structure.Box, newPosition)
     }
 
-    private fun tryMoveWideBox(positionLeft: Position, positionRight: Position, direction: Movement): Boolean {
+    private fun tryMoveWideBox(positionLeft: Position, positionRight: Position, direction: Direction): Boolean {
         if (canMoveWideBox(positionLeft, positionRight, direction)) {
             moveWideBox(positionLeft, positionRight, direction)
             return true
@@ -102,14 +91,14 @@ class Warehouse {
         return false
     }
 
-    private fun canMoveWideBox(positionLeft: Position, positionRight: Position, direction: Movement): Boolean {
+    private fun canMoveWideBox(positionLeft: Position, positionRight: Position, direction: Direction): Boolean {
         val nextPositionLeft = positionLeft + direction.position
         val nextStructureLeft = getStructure(nextPositionLeft)
 
         val nextPositionRight = positionRight + direction.position
         val nextStructureRight = getStructure(nextPositionRight)
 
-        if (direction == Movement.Up || direction == Movement.Down) {
+        if (direction == Direction.Up || direction == Direction.Down) {
             if (nextStructureLeft is Structure.Wall || nextStructureRight is Structure.Wall) return false
 
             if (nextStructureLeft is Structure.WideBox || nextStructureRight is Structure.WideBox) {
@@ -134,7 +123,7 @@ class Warehouse {
             }
 
         } else {
-            val nextStructure = if (direction == Movement.Left) nextStructureLeft else nextStructureRight
+            val nextStructure = if (direction == Direction.Left) nextStructureLeft else nextStructureRight
 
             when (nextStructure) {
                 null -> return true
@@ -146,14 +135,14 @@ class Warehouse {
         return true
     }
 
-    private fun moveWideBox(positionLeft: Position, positionRight: Position, direction: Movement) {
+    private fun moveWideBox(positionLeft: Position, positionRight: Position, direction: Direction) {
         val nextPositionLeft = positionLeft + direction.position
         val nextStructureLeft = getStructure(nextPositionLeft)
 
         val nextPositionRight = positionRight + direction.position
         val nextStructureRight = getStructure(nextPositionRight)
 
-        if (direction == Movement.Up || direction == Movement.Down) {
+        if (direction == Direction.Up || direction == Direction.Down) {
             if (nextStructureLeft is Structure.WideBox || nextStructureRight is Structure.WideBox) {
                 if (nextStructureLeft == nextStructureRight) {
                     moveWideBox(nextPositionLeft, nextPositionRight, direction)
@@ -169,9 +158,9 @@ class Warehouse {
 
             }
         } else {
-            if (direction == Movement.Left && nextStructureLeft is Structure.WideBox)
+            if (direction == Direction.Left && nextStructureLeft is Structure.WideBox)
                 moveWideBox(nextPositionLeft.copy(x = nextPositionLeft.x - 1), nextPositionLeft, direction)
-            if (direction == Movement.Right && nextStructureRight is Structure.WideBox) {
+            if (direction == Direction.Right && nextStructureRight is Structure.WideBox) {
                 moveWideBox(nextPositionRight, nextPositionRight.copy(x = nextPositionRight.x + 1), direction)
             }
         }
@@ -220,10 +209,10 @@ fun part1(input: List<String>): Long {
                 '#' -> world.addWall(pos)
                 'O' -> world.addBox(pos)
                 '@' -> world.setRobotPosition(pos)
-                'v' -> world.moveRobot(Movement.Down)
-                '>' -> world.moveRobot(Movement.Right)
-                '<' -> world.moveRobot(Movement.Left)
-                '^' -> world.moveRobot(Movement.Up)
+                'v' -> world.moveRobot(Direction.Down)
+                '>' -> world.moveRobot(Direction.Right)
+                '<' -> world.moveRobot(Direction.Left)
+                '^' -> world.moveRobot(Direction.Up)
             }
         }
     }
@@ -245,10 +234,10 @@ fun part2(input: List<String>): Long {
 
                 'O' -> world.addWideBox(pos1, pos2)
                 '@' -> world.setRobotPosition(pos1)
-                'v' -> world.moveRobot(Movement.Down)
-                '>' -> world.moveRobot(Movement.Right)
-                '<' -> world.moveRobot(Movement.Left)
-                '^' -> world.moveRobot(Movement.Up)
+                'v' -> world.moveRobot(Direction.Down)
+                '>' -> world.moveRobot(Direction.Right)
+                '<' -> world.moveRobot(Direction.Left)
+                '^' -> world.moveRobot(Direction.Up)
             }
         }
     }
