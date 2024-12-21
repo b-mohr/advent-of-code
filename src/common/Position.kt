@@ -10,3 +10,17 @@ enum class Direction(val position: Position) {
     Left(Position(-1, 0)),
     Right(Position(1, 0));
 }
+
+fun Direction.rotateLeft(): Direction = when (this) {
+    Direction.Up -> Direction.Left
+    Direction.Left -> Direction.Down
+    Direction.Down -> Direction.Right
+    Direction.Right -> Direction.Up
+}
+
+fun Direction.rotateRight(): Direction = when (this) {
+    Direction.Up -> Direction.Right
+    Direction.Right -> Direction.Down
+    Direction.Down -> Direction.Left
+    Direction.Left -> Direction.Up
+}
